@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"../"
+	"github.com/timob/nodeprobe"
 	"github.com/timob/javabind"
 	"text/tabwriter"
 	"os"
