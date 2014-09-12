@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"../"
@@ -22,15 +23,26 @@ type stat struct {
 }
 
 func main() {
+	host := flag.String("host", "localhost", "host to connect to")
+	port := flag.Int("port", 7199, "port to connect to")
+	userName := flag.String("user", "", "user name")
+	pass := flag.String("pass", "", "password") 
+	flag.Parse()
+	
 	err := javabind.SetupJVM(os.Getenv("CLASSPATH"))
 	if err != nil {
 		log.Fatal(err)
 	}
 	
-	nodeProbe, err := nodeprobe.NewToolsNodeProbe3("localhost")
+	var nodeProbe *nodeprobe.ToolsNodeProbe
+	if *userName != "" {
+		nodeProbe, err = nodeprobe.NewToolsNodeProbe(*host, *port, *userName, *pass)
+	} else {
+		nodeProbe, err = nodeprobe.NewToolsNodeProbe2(*host, *port)
+	}
 	if err != nil {
 		log.Fatal(err)
-	}
+	}	
 		
 	writer := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
 	
@@ -41,9 +53,7 @@ func main() {
 	stats = append(stats, stat{"ReadCount", "%d", func(p *proxy) interface{} { return p.bean.GetReadCount() }})
 	stats = append(stats, stat{"WriteCount", "%d", func(p *proxy) interface{} { return p.bean.GetWriteCount() }})
 	stats = append(stats, stat{"LiveSSTableCount", "%d", func(p *proxy) interface{} { return p.bean.GetLiveSSTableCount() }})
-	
-	
-//	titles := forall(stats, func(s *stat) string { return s.title}).([]string)
+		
 	titles := make([]string, 0)
 	formats := make([]string, 0)
 	for _, s := range stats {
