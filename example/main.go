@@ -22,10 +22,7 @@ type stat struct {
 }
 
 func main() {
-	err := javabind.SetupJVM(
-		"/files/data/apache-cassandra-2.0.8/lib/apache-cassandra-2.0.8.jar",
-		"/files/data/apache-cassandra-2.0.8/lib/guava-15.0.jar",
-	)	
+	err := javabind.SetupJVM(os.Getenv("CLASSPATH"))
 	if err != nil {
 		log.Fatal(err)
 	}
