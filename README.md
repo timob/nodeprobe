@@ -1,7 +1,10 @@
 nodeprobe
 ==========
 
-Cassandra DB monitoring.
+Cassandra DB monitoring library.
+
+####Example
+See nodestat example utility in source code.
 
 ####Install
 Eg. On on Ubuntu with Cassandra installed in /files/data/apache-cassandra-2.0.8
